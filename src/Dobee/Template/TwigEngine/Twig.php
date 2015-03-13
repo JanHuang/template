@@ -41,11 +41,11 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
     public function render($template, array $parameters = array())
     {
         if (false !== ($pos = strpos($template, ':'))) {
-            
+
             list($bundle, $module, $template) = explode(':', $template);
 
             $template = implode(DIRECTORY_SEPARATOR, array(
-                $bundle, 'Resources', $module, $template,
+                $bundle, 'Resources/views', $module, $template,
             ));
         }
 
