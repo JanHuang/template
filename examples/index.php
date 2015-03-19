@@ -15,16 +15,14 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Dobee\Template\Template;
 
-$template = new Template('dev', array(
-    'cache_path' => __DIR__ . '/cache',
+$template = new Template('prod', array(
+    'cache' => __DIR__ . '/cache',
     'paths' => array(__DIR__)
 ));
 
 $template->setExtensions('path', new Twig_SimpleFunction('path', function ($path) {
     return $path;
 }));
-
-$template->setOptions(array('debug' => 1));
 
 $twig = $template->getEngine('twig');
 

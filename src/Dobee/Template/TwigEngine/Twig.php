@@ -57,7 +57,7 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
         }
 
         if (in_array($env, array('test', 'dev'))) {
-            unset($options['cache_path']);
+            unset($options['cache']);
         }
 
         if (isset($options['root_path'])) {
