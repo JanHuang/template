@@ -24,19 +24,12 @@ use Dobee\Template\TemplateEngineInterface;
  */
 class Twig extends \Twig_Environment implements TemplateEngineInterface
 {
-    public function __construct(array $options = array(), array $extensions = array(), array $paths = array())
-    {
-        parent::__construct(new \Twig_Loader_Filesystem($paths), $options);
-
-        foreach ($extensions as $name => $function) {
-            $this->addFunction($name, $function);
-        }
-    }
+    protected $rootPath = 'Resources/views';
 
     /**
      * @param       $template
      * @param array $parameters
-     * @return string|ResponseInterface
+     * @return string
      */
     public function render($template, array $parameters = array())
     {
@@ -45,7 +38,7 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
             list($bundle, $module, $template) = explode(':', $template);
 
             $template = implode(DIRECTORY_SEPARATOR, array(
-                $bundle, 'Resources/views', $module, $template,
+                $bundle, $this->rootPath, $module, $template,
             ));
         }
 
@@ -53,29 +46,30 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
     }
 
     /**
-     * @param array $extensions
-     * @return $this
-     */
-    public function setExtension(array $extensions)
-    {
-        // TODO: Implement setExtension() method.
-    }
-
-    /**
-     * @param array $paths
-     * @return $this
-     */
-    public function setPaths(array $paths)
-    {
-        // TODO: Implement setPaths() method.
-    }
-
-    /**
+     * @param       $env
      * @param array $options
-     * @return $this
+     * @param array $extensions
      */
-    public function setOptions(array $options)
+    public function __construct($env = null, array $options = array(), array $extensions = array())
     {
-        // TODO: Implement setOptions() method.
+        if (null === $env) {
+            $env = 'prod';
+        }
+
+        if (in_array($env, array('test', 'dev'))) {
+            unset($options['cache_path']);
+        }
+
+        if (isset($options['root_path'])) {
+            $this->rootPath = $options['root_path'];
+        }
+
+        parent::__construct(new \Twig_Loader_Filesystem(isset($options['paths']) ? $options['paths'] : __DIR__), $options);
+
+        foreach ($extensions as $name => $function) {
+            if ($function instanceof \Twig_SimpleFunction) {
+                $this->addFunction($name, $function);
+            }
+        }
     }
 }

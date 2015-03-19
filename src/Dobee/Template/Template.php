@@ -16,7 +16,7 @@ namespace Dobee\Template;
 /**
  * Class Template
  *
- *@package Dobee\Template
+ * @package Dobee\Template
  */
 class Template
 {
@@ -27,45 +27,74 @@ class Template
         'twig' => 'Dobee\\Template\\TwigEngine\\Twig',
     );
 
+    /**
+     * @var array
+     */
     private $engines = array();
 
-    private $provides = array();
+    /**
+     * @var array
+     */
+    private $extensions = array();
 
-    private $extension = array();
-
+    /**
+     * @var array
+     */
     private $options = array();
 
-    public function setExtensions($name, $callable)
+    /**
+     * @var string
+     */
+    protected $environment;
+
+    /**
+     * @param string $env
+     * @param array  $options
+     * @param array  $extensions
+     */
+    public function __construct($env = 'dev', array $options = array(), array $extensions = array())
     {
-        $this->extension[$name] = $callable;
+        $this->environment = $env;
 
-        return $this;
-    }
-
-    public function getExtensions()
-    {
-        return $this->extension;
-    }
-
-    public function setProviderPath(array $provides = array())
-    {
-        $this->provides = $provides;
-
-        return $this;
-    }
-
-    public function getProviderPath()
-    {
-        return $this->provides;
-    }
-
-    public function setOptions(array $options)
-    {
         $this->options = $options;
 
+        $this->extensions = $extensions;
+    }
+
+    /**
+     * @param $name
+     * @param $callable
+     * @return $this
+     */
+    public function setExtensions($name, $callable)
+    {
+        $this->extensions[$name] = $callable;
+
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;
@@ -83,25 +112,10 @@ class Template
         }
 
         if (!isset($this->engines[$engine])) {
-            $templateEngine = new $this->mapped[$engine]($this->getOptions(), $this->getExtensions(), $this->getProviderPath());
-            $templateEngine->setPaths($this->getProviderPath());
-            $templateEngine->setExtension($this->getExtensions());
-            $templateEngine->setOptions($this->getOptions());
-            $this->setEngine($engine, $templateEngine);
+            $templateEngine = new $this->mapped[$engine]($this->environment, $this->options, $this->extensions);
+            $this->engines[$engine] = $templateEngine;
         }
 
         return $this->engines[$engine];
-    }
-
-    /**
-     * @param                         $engine
-     * @param TemplateEngineInterface $templateEngineInterface
-     * @return $this
-     */
-    public function setEngine($engine, TemplateEngineInterface $templateEngineInterface)
-    {
-        $this->engines[$engine] = $templateEngineInterface;
-
-        return $this;
     }
 }

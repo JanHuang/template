@@ -21,22 +21,11 @@ namespace Dobee\Template;
 interface TemplateEngineInterface
 {
     /**
-     * @param array $extensions
-     * @return $this
-     */
-    public function setExtension(array $extensions);
-
-    /**
-     * @param array $paths
-     * @return $this
-     */
-    public function setPaths(array $paths);
-
-    /**
+     * @param       $env
      * @param array $options
-     * @return $this
+     * @param array $extensions
      */
-    public function setOptions(array $options);
+    public function __construct($env, array $options = array(), array $extensions = array());
 
     /**
      * @param       $template
