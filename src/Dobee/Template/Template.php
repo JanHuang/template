@@ -102,6 +102,11 @@ class Template
         return array();
     }
 
+    public function registerGlobal()
+    {
+        return array();
+    }
+
     /**
      * @param array $options
      * @return $this
@@ -136,6 +141,8 @@ class Template
 
         if (!isset($this->engines[$engine])) {
             $templateEngine = new $this->mapped[$engine]($this->debug, $this->options);
+            $templateEngine->registerExtensions($this->registerExtensions());
+            $templateEngine->registerGlobal($this->registerGlobal());
             $this->engines[$engine] = $templateEngine;
         }
 
