@@ -21,11 +21,10 @@ namespace Dobee\Template;
 interface TemplateEngineInterface
 {
     /**
-     * @param       $env
-     * @param array $options
-     * @param array $extensions
+     * @param bool  $debug
+     * @param array $arguments
      */
-    public function __construct($env, array $options = array(), array $extensions = array());
+    public function __construct($debug = true, array $arguments = array());
 
     /**
      * @param       $template
@@ -33,4 +32,16 @@ interface TemplateEngineInterface
      * @return string
      */
     public function render($template, array $parameters = array());
+
+    /**
+     * @param array $extension
+     * @return void
+     */
+    public function registerExtensions(array $extension = array());
+
+    /**
+     * @param array $global
+     * @return void
+     */
+    public function registerGlobal(array $global = array());
 }

@@ -15,15 +15,21 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Dobee\Template\Template;
 
-$template = new Template('prod', array(
-    'cache' => __DIR__ . '/cache',
+$template = new Template(true, array(
+    'options' => array('cache' => __DIR__ . '/cache'),
     'paths' => array(__DIR__)
 ));
 
-$template->setExtensions('path', new Twig_SimpleFunction('path', function ($path) {
-    return $path;
-}));
+$engine = $template->getEngine('twig');
 
-$twig = $template->getEngine('twig');
+$engine->registerExtensions(array(
+    'demo' => new Twig_SimpleFunction('demo', function () {
+        return 'demo';
+    })
+));
 
-echo $twig->render('index.html.twig', array('name' => 'janhuang'));
+$engine->registerGlobal(array(
+    'get' => $_GET
+));
+
+echo $engine->render('index.html.twig', array('name' => 'janhuang'));

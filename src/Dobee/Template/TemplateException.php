@@ -13,7 +13,7 @@
 
 namespace Dobee\Template;
 
-class TemplateEngineException extends \Exception
+class TemplateException extends \Exception
 {
 
 }

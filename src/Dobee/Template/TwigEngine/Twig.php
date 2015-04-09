@@ -24,7 +24,10 @@ use Dobee\Template\TemplateEngineInterface;
  */
 class Twig extends \Twig_Environment implements TemplateEngineInterface
 {
-    protected $rootPath = 'Resources/views';
+    /**
+     * @var string
+     */
+    protected $rootPath = 'Views';
 
     /**
      * @param       $template
@@ -46,30 +49,42 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
     }
 
     /**
-     * @param       $env
-     * @param array $options
-     * @param array $extensions
+     * @param bool  $debug
+     * @param array $arguments
      */
-    public function __construct($env = null, array $options = array(), array $extensions = array())
+    public function __construct($debug = true, array $arguments = array())
     {
-        if (null === $env) {
-            $env = 'prod';
+        $loader = new \Twig_Loader_Filesystem($arguments['paths']);
+
+        if ($debug) {
+            $arguments['options']['debug'] = true;
+            $arguments['options']['cache'] = false;
         }
 
-        if (in_array($env, array('test', 'dev'))) {
-            unset($options['cache']);
-        }
+        parent::__construct($loader, $arguments['options']);
+    }
 
-        if (isset($options['root_path'])) {
-            $this->rootPath = $options['root_path'];
-        }
-
-        parent::__construct(new \Twig_Loader_Filesystem(isset($options['paths']) ? $options['paths'] : __DIR__), $options);
-
-        foreach ($extensions as $name => $function) {
-            if ($function instanceof \Twig_SimpleFunction) {
-                $this->addFunction($name, $function);
+    /**
+     * @param array $extension
+     * @return void
+     */
+    public function registerExtensions(array $extension = array())
+    {
+        foreach ($extension as $name => $func) {
+            if ($func instanceof \Twig_SimpleFunction) {
+                $this->addFunction($name, $func);
             }
+        }
+    }
+
+    /**
+     * @param array $global
+     * @return void
+     */
+    public function registerGlobal(array $global = array())
+    {
+        foreach ($global as $name => $value) {
+            $this->addGlobal($name, $value);
         }
     }
 }

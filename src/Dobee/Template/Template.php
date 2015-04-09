@@ -30,7 +30,7 @@ class Template
     /**
      * @var array
      */
-    private $engines = array();
+    protected $engines = array();
 
     /**
      * @var array
@@ -45,20 +45,33 @@ class Template
     /**
      * @var string
      */
-    protected $environment;
+    private $defaultEngine = 'twig';
 
     /**
-     * @param string $env
-     * @param array  $options
-     * @param array  $extensions
+     * @var bool
      */
-    public function __construct($env = 'dev', array $options = array(), array $extensions = array())
+    private $debug;
+
+    /**
+     * @param bool   $debug
+     * @param array  $options
+     * @param string $defaultEngine
+     */
+    public function __construct($debug = true, array $options = array(), $defaultEngine = 'twig')
     {
-        $this->environment = $env;
+        $this->debug = $debug;
 
         $this->options = $options;
 
-        $this->extensions = $extensions;
+        $this->defaultEngine = $defaultEngine;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDebug()
+    {
+        return $this->debug;
     }
 
     /**
@@ -79,6 +92,14 @@ class Template
     public function getExtensions()
     {
         return $this->extensions;
+    }
+
+    /**
+     * @return array
+     */
+    public function registerExtensions()
+    {
+        return array();
     }
 
     /**
@@ -103,16 +124,18 @@ class Template
     /**
      * @param $engine
      * @return TemplateEngineInterface
-     * @throws TemplateEngineException
+     * @throws TemplateException
      */
-    public function getEngine($engine)
+    public function getEngine($engine = null)
     {
         if (!isset($this->mapped[$engine])) {
-            throw new TemplateEngineException(sprintf('Template engine "%s" is undefined.', $engine));
+            throw new TemplateException(sprintf('Template engine "%s" is undefined.', $engine));
         }
 
+        $engine = null === $engine ? $this->defaultEngine : $engine;
+
         if (!isset($this->engines[$engine])) {
-            $templateEngine = new $this->mapped[$engine]($this->environment, $this->options, $this->extensions);
+            $templateEngine = new $this->mapped[$engine]($this->debug, $this->options);
             $this->engines[$engine] = $templateEngine;
         }
 
