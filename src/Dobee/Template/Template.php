@@ -133,11 +133,11 @@ class Template
      */
     public function getEngine($engine = null)
     {
+        $engine = null === $engine ? $this->defaultEngine : $engine;
+
         if (!isset($this->mapped[$engine])) {
             throw new TemplateException(sprintf('Template engine "%s" is undefined.', $engine));
         }
-
-        $engine = null === $engine ? $this->defaultEngine : $engine;
 
         if (!isset($this->engines[$engine])) {
             $templateEngine = new $this->mapped[$engine]($this->debug, $this->options);
