@@ -51,17 +51,16 @@ class TemplateManager
      */
     private $defaultEngine = 'twig';
 
-    /**
-     * @var bool
-     */
-    private $debug;
+    private $config = array();
 
-    /**
-     * @return bool
-     */
-    public function getDebug()
+    public function __construct(array $config)
     {
-        return $this->debug;
+        $this->config = $config;
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -129,10 +128,7 @@ class TemplateManager
         }
 
         if (!isset($this->engines[$engine])) {
-            $templateEngine = new $this->mapped[$engine]($this->debug, $this->options);
-            $templateEngine->registerExtensions($this->registerExtensions());
-            $templateEngine->registerGlobal($this->registerGlobal());
-            $this->engines[$engine] = $templateEngine;
+            $this->engines[$engine] = new $this->mapped[$engine]($this->config);
         }
 
         return $this->engines[$engine];
