@@ -24,7 +24,11 @@ class Template
      * @var array
      */
     private $mapped = array(
-        'twig' => 'Dobee\\Template\\TwigEngine\\Twig',
+        'twig'      => 'Dobee\\Template\\TwigEngine\\Twig',
+        'blade'     => '',
+        'mustache'  => '',
+        'smarty'    => '',
+        'volt'      => '',
     );
 
     /**
@@ -129,14 +133,13 @@ class Template
     /**
      * @param $engine
      * @return TemplateEngineInterface
-     * @throws TemplateException
      */
     public function getEngine($engine = null)
     {
         $engine = null === $engine ? $this->defaultEngine : $engine;
 
         if (!isset($this->mapped[$engine])) {
-            throw new TemplateException(sprintf('Template engine "%s" is undefined.', $engine));
+            throw new \UnexpectedValueException(sprintf('Template engine "%s" is undefined.', $engine));
         }
 
         if (!isset($this->engines[$engine])) {
