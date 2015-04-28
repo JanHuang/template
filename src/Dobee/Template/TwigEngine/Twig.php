@@ -43,7 +43,10 @@ class Twig implements TemplateEngineInterface
     {
         $loader = new \Twig_Loader_Filesystem($config['paths']);
 
-        $this->twig = new \Twig_Environment($loader, $config['options']);
+        $this->twig = new \Twig_Environment($loader, array(
+            isset($config['debug']) ? $config['debug'] : false,
+            isset($config['cache']) ? $config['cache'] : false,
+        ));
 
         if (isset($config['extensions']) && is_array($config['extensions'])) {
             $this->registerExtensions($config['extensions']);
