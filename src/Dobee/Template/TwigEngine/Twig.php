@@ -22,12 +22,9 @@ use Dobee\Template\TemplateEngineInterface;
  *
  * @package Dobee\Template\TwigEngine
  */
-class Twig extends \Twig_Environment implements TemplateEngineInterface
+class Twig implements TemplateEngineInterface
 {
-    /**
-     * @var string
-     */
-    protected $rootPath = 'Views';
+    private $twig;
 
     /**
      * @param       $template
@@ -36,32 +33,25 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
      */
     public function render($template, array $parameters = array())
     {
-        if (false !== ($pos = strpos($template, ':'))) {
-
-            list($bundle, $module, $template) = explode(':', $template);
-
-            $template = implode(DIRECTORY_SEPARATOR, array(
-                $bundle, $this->rootPath, $module, $template,
-            ));
-        }
-
-        return parent::render($template, $parameters);
+        return $this->twig->render($template, $parameters);
     }
 
     /**
-     * @param bool  $debug
-     * @param array $arguments
+     * @param array $config
      */
-    public function __construct($debug = true, array $arguments = array())
+    public function __construct(array $config)
     {
-        $loader = new \Twig_Loader_Filesystem($arguments['paths']);
+        $loader = new \Twig_Loader_Filesystem($config['paths']);
 
-        if ($debug) {
-            $arguments['options']['debug'] = true;
-            $arguments['options']['cache'] = false;
+        $this->twig = new \Twig_Environment($loader, $config['options']);
+
+        if (isset($config['extensions']) && is_array($config['extensions'])) {
+            $this->registerExtensions($config['extensions']);
         }
 
-        parent::__construct($loader, $arguments['options']);
+        if (isset($config['global']) && is_array($config['global'])) {
+            $this->registerGlobal($config['global']);
+        }
     }
 
     /**
@@ -72,7 +62,7 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
     {
         foreach ($extension as $name => $func) {
             if ($func instanceof \Twig_SimpleFunction) {
-                $this->addFunction($name, $func);
+                $this->twig->addFunction($name, $func);
             }
         }
     }
@@ -84,7 +74,7 @@ class Twig extends \Twig_Environment implements TemplateEngineInterface
     public function registerGlobal(array $global = array())
     {
         foreach ($global as $name => $value) {
-            $this->addGlobal($name, $value);
+            $this->twig->addGlobal($name, $value);
         }
     }
 }

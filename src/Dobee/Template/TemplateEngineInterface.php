@@ -21,10 +21,9 @@ namespace Dobee\Template;
 interface TemplateEngineInterface
 {
     /**
-     * @param bool  $debug
-     * @param array $arguments
+     * @param array $config
      */
-    public function __construct($debug = true, array $arguments = array());
+    public function __construct(array $config);
 
     /**
      * @param       $template

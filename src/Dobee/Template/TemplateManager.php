@@ -18,7 +18,7 @@ namespace Dobee\Template;
  *
  * @package Dobee\Template
  */
-class Template
+class TemplateManager
 {
     /**
      * @var array
@@ -55,20 +55,6 @@ class Template
      * @var bool
      */
     private $debug;
-
-    /**
-     * @param bool   $debug
-     * @param array  $options
-     * @param string $defaultEngine
-     */
-    public function __construct($debug = true, array $options = array(), $defaultEngine = 'twig')
-    {
-        $this->debug = $debug;
-
-        $this->options = $options;
-
-        $this->defaultEngine = $defaultEngine;
-    }
 
     /**
      * @return bool
