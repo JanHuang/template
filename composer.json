@@ -1,5 +1,5 @@
 {
-    "name": "FastD/template",
+    "name": "fastd/template",
     "license": "MIT",
     "type": "library",
     "keywords": ["template", "twig", "templating", "FastD"],
