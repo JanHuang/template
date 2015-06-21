@@ -11,12 +11,12 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace Dobee\Template;
+namespace FastD\Template;
 
 /**
  * Interface TemplateEngineInterface
  *
- * @package Dobee\Template
+ * @package FastD\Template
  */
 interface TemplateEngineInterface
 {

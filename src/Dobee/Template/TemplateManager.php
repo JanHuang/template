@@ -11,12 +11,12 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace Dobee\Template;
+namespace FastD\Template;
 
 /**
  * Class Template
  *
- * @package Dobee\Template
+ * @package FastD\Template
  */
 class TemplateManager
 {
@@ -24,7 +24,7 @@ class TemplateManager
      * @var array
      */
     private $mapped = array(
-        'twig'      => 'Dobee\\Template\\TwigEngine\\Twig',
+        'twig'      => 'FastD\\Template\\TwigEngine\\Twig',
         'blade'     => '',
         'mustache'  => '',
         'smarty'    => '',

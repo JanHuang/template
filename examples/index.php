@@ -13,7 +13,7 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-use Dobee\Template\Template;
+use FastD\Template\Template;
 
 $template = new Template(true, array(
     'options' => array('cache' => __DIR__ . '/cache'),
