@@ -15,21 +15,8 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use FastD\Template\Template;
 
-$template = new Template(true, array(
-    'options' => array('cache' => __DIR__ . '/cache'),
-    'paths' => array(__DIR__)
-));
+$template = new Template([
+    __DIR__,
+], ['cache' => __DIR__ . '/cache']);
 
-$engine = $template->getEngine('twig');
-
-$engine->registerExtensions(array(
-    'demo' => new Twig_SimpleFunction('demo', function () {
-        return 'demo';
-    })
-));
-
-$engine->registerGlobal(array(
-    'get' => $_GET
-));
-
-echo $engine->render('index.html.twig', array('name' => 'janhuang'));
+echo $template->render('index.html.twig');
