@@ -17,6 +17,6 @@ use FastD\Template\Template;
 
 $template = new Template([
     __DIR__,
-], ['cache' => __DIR__ . '/cache']);
+]);
 
 echo $template->render('index.html.twig');

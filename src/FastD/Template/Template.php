@@ -21,5 +21,13 @@ class Template extends \Twig_Environment
     public function __construct(array $paths = [], $options = [])
     {
         parent::__construct(new \Twig_Loader_Filesystem($paths), $options);
+        $this->addFunction('file_exists', new \Twig_SimpleFunction('file_exists', function ($template) use ($paths) {
+            foreach ($paths as $path) {
+                if (file_exists(str_replace('//', '/', $path . DIRECTORY_SEPARATOR . $template))) {
+                    return true;
+                }
+            }
+            return false;
+        }));
     }
 }
