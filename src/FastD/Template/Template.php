@@ -30,6 +30,5 @@ class Template extends \Twig_Environment
             }
             return false;
         }));
-        restore_error_handler();
     }
 }

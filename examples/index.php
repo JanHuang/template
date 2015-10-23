@@ -13,7 +13,9 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
+
+echo ini_get('error_reporting');
 
 
 use FastD\Template\Template;
