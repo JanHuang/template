@@ -13,10 +13,30 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
+error_reporting(E_ALL);
+
+
 use FastD\Template\Template;
+
+/*
+ * [0] => Array
+        (
+            [0] => /Users/janhuang/Documents/htdocs/me/fastd/framework/fastD/app/config/../views
+            [1] => /Users/janhuang/Documents/htdocs/me/fastd/framework/fastD/app/config/../../src
+            [2] => /Users/janhuang/Documents/htdocs/me/fastd/framework/fastD/src
+            [3] => /Users/janhuang/Documents/htdocs/me/fastd/framework/fastD/vendor/fastd/swoole-bundle/src
+        )
+
+    [1] => Array
+        (
+            [cache] => /Users/janhuang/Documents/htdocs/me/fastd/framework/fastD/app/config/../storage/templates
+        )
+ * */
 
 $template = new Template([
     __DIR__,
+], [
+    'cache' => __DIR__ . '/cache'
 ]);
 
 echo $template->render('index.html.twig');

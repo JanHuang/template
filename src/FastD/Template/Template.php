@@ -20,6 +20,7 @@ class Template extends \Twig_Environment
 
     public function __construct(array $paths = [], $options = [])
     {
+        set_error_handler(function () {});
         parent::__construct(new \Twig_Loader_Filesystem($paths), $options);
         $this->addFunction(new \Twig_SimpleFunction('file_exists', function ($template) use ($paths) {
             foreach ($paths as $path) {
@@ -29,5 +30,6 @@ class Template extends \Twig_Environment
             }
             return false;
         }));
+        restore_error_handler();
     }
 }
