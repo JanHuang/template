@@ -38,7 +38,42 @@ use FastD\Template\Template;
 $template = new Template([
     __DIR__,
 ], [
-    'cache' => __DIR__ . '/cache'
+//    'cache' => __DIR__ . '/cache'
 ]);
+
+class Demo extends \FastD\Template\Extensions\Functions\TemplateFunction
+{
+
+    public function getExtensionName()
+    {
+        return 'demo';
+    }
+
+    public function getExtensionContent()
+    {
+        return function () {
+            echo 'demo function ';
+        };
+    }
+}
+
+class DemoF extends \FastD\Template\Extensions\Filters\TemplateFilter
+{
+
+    public function getExtensionName()
+    {
+        return 'demof';
+    }
+
+    public function getExtensionContent()
+    {
+        return function ($string) {
+            return 123;
+        };
+    }
+}
+
+$template->addFunction(new Demo());
+$template->addFilter(new DemoF);
 
 echo $template->render('index.html.twig');
