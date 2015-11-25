@@ -41,39 +41,44 @@ $template = new Template([
 //    'cache' => __DIR__ . '/cache'
 ]);
 
-class Demo extends \FastD\Template\Extensions\Functions\TemplateFunction
+class Demo extends \FastD\Template\Extension
 {
-
-    public function getExtensionName()
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     */
+    public function getName()
     {
         return 'demo';
     }
 
-    public function getExtensionContent()
+    /**
+     * Returns a list of filters to add to the existing list.
+     *
+     * @return Twig_SimpleFilter[]
+     */
+    public function getFilters()
     {
-        return function () {
-            echo 'demo function ';
-        };
+        return [new Twig_SimpleFilter('demo_f', function () {
+            return 'demo_f';
+        })];
+    }
+
+    /**
+     * Returns a list of functions to add to the existing list.
+     *
+     * @return Twig_SimpleFunction[]
+     */
+    public function getFunctions()
+    {
+        return [new Twig_SimpleFunction('demo', function () {
+            return 'demo';
+        })];
     }
 }
 
-class DemoF extends \FastD\Template\Extensions\Filters\TemplateFilter
-{
+$template->addExtension(new Demo());
 
-    public function getExtensionName()
-    {
-        return 'demof';
-    }
-
-    public function getExtensionContent()
-    {
-        return function ($string) {
-            return 123;
-        };
-    }
-}
-
-$template->addFunction(new Demo());
-$template->addFilter(new DemoF);
 
 echo $template->render('index.html.twig');

@@ -16,7 +16,7 @@ namespace FastD\Template;
 
 class Template extends \Twig_Environment
 {
-    const VERSION = 'v0.1.*-dev';
+    const VERSION = 'v2.0.x-dev';
 
     public function __construct(array $paths = [], $options = [])
     {
