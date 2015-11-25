@@ -18,7 +18,7 @@ class Template extends \Twig_Environment
 {
     const VERSION = 'v2.0.x-dev';
 
-    public function __construct(array $paths = [], $options = [])
+    public function __construct(array $paths, array $options = [])
     {
         set_error_handler(function () {});
         parent::__construct(new \Twig_Loader_Filesystem($paths), $options);
